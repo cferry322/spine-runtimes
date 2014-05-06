@@ -86,6 +86,17 @@ typedef enum {
 	SP_TIMELINE_FFD
 } spTimelineType;
 
+
+
+static const int SP_TIMELINE_FILTER_SCALE      = 1 << SP_TIMELINE_SCALE;
+static const int SP_TIMELINE_FILTER_ROTATE     = 1 << SP_TIMELINE_ROTATE;
+static const int SP_TIMELINE_FILTER_TRANSLATE  = 1 << SP_TIMELINE_TRANSLATE;
+static const int SP_TIMELINE_FILTER_COLOR      = 1 << SP_TIMELINE_COLOR;
+static const int SP_TIMELINE_FILTER_ATTACHMENT = 1 << SP_TIMELINE_ATTACHMENT;
+static const int SP_TIMELINE_FILTER_EVENT      = 1 << SP_TIMELINE_EVENT;
+static const int SP_TIMELINE_FILTER_DRAWORDER  = 1 << SP_TIMELINE_DRAWORDER;
+static const int SP_TIMELINE_FILTER_FFD        = 1 << SP_TIMELINE_FFD;
+
 struct spTimeline {
 	const spTimelineType type;
 

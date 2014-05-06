@@ -51,6 +51,8 @@ typedef struct spSlot {
 	int attachmentVerticesCapacity;
 	int attachmentVerticesCount;
 	float* attachmentVertices;
+
+	int  timelineFilter;
 } spSlot;
 
 spSlot* spSlot_create (spSlotData* data, struct spSkeleton* skeleton, spBone* bone);

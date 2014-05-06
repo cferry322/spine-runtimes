@@ -44,7 +44,8 @@ struct spBone {
 	float x, y;
 	float rotation;
 	float scaleX, scaleY;
-
+	int   timelineFilter;
+	
 	float const m00, m01, worldX; /* a b x */
 	float const m10, m11, worldY; /* c d y */
 	float const worldRotation;

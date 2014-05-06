@@ -41,6 +41,7 @@ spBone* spBone_create (spBoneData* data, spBone* parent) {
 	spBone* self = NEW(spBone);
 	CONST_CAST(spBoneData*, self->data) = data;
 	CONST_CAST(spBone*, self->parent) = parent;
+	self->timelineFilter = 0;
 	spBone_setToSetupPose(self);
 	return self;
 }

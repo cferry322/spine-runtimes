@@ -255,6 +255,7 @@ void _spRotateTimeline_apply (const spTimeline* timeline, spSkeleton* skeleton, 
 	if (time < self->frames[0]) return; /* Time is before first frame. */
 
 	bone = skeleton->bones[self->boneIndex];
+	if ((bone->timelineFilter & SP_TIMELINE_FILTER_ROTATE) != 0) return;
 
 	if (time >= self->frames[self->framesCount - 2]) { /* Time is after last frame. */
 		float amount = bone->data->rotation + self->frames[self->framesCount - 1] - bone->rotation;
@@ -313,6 +314,7 @@ void _spTranslateTimeline_apply (const spTimeline* timeline, spSkeleton* skeleto
 	if (time < self->frames[0]) return; /* Time is before first frame. */
 
 	bone = skeleton->bones[self->boneIndex];
+	if ((bone->timelineFilter & SP_TIMELINE_FILTER_TRANSLATE) != 0) return;
 
 	if (time >= self->frames[self->framesCount - 3]) { /* Time is after last frame. */
 		bone->x += (bone->data->x + self->frames[self->framesCount - 2] - bone->x) * alpha;
@@ -358,6 +360,8 @@ void _spScaleTimeline_apply (const spTimeline* timeline, spSkeleton* skeleton, f
 	if (time < self->frames[0]) return; /* Time is before first frame. */
 
 	bone = skeleton->bones[self->boneIndex];
+	if ((bone->timelineFilter & SP_TIMELINE_FILTER_SCALE) != 0) return;
+
 	if (time >= self->frames[self->framesCount - 3]) { /* Time is after last frame. */
 		bone->scaleX += (bone->data->scaleX - 1 + self->frames[self->framesCount - 2] - bone->scaleX) * alpha;
 		bone->scaleY += (bone->data->scaleY - 1 + self->frames[self->framesCount - 1] - bone->scaleY) * alpha;
@@ -405,6 +409,7 @@ void _spColorTimeline_apply (const spTimeline* timeline, spSkeleton* skeleton, f
 	if (time < self->frames[0]) return; /* Time is before first frame. */
 
 	slot = skeleton->slots[self->slotIndex];
+	if ((slot->timelineFilter & SP_TIMELINE_FILTER_COLOR) != 0) return;
 
 	if (time >= self->frames[self->framesCount - 5]) {
 		/* Time is after last frame. */
@@ -461,9 +466,13 @@ void _spAttachmentTimeline_apply (const spTimeline* timeline, spSkeleton* skelet
 		spEvent** firedEvents, int* eventCount, float alpha) {
 	int frameIndex;
 	const char* attachmentName;
+	spSlot *slot;
 	spAttachmentTimeline* self = (spAttachmentTimeline*)timeline;
 
 	if (time < self->frames[0]) return; /* Time is before first frame. */
+	
+	slot = skeleton->slots[self->slotIndex];
+	if ((slot->timelineFilter & SP_TIMELINE_FILTER_ATTACHMENT) != 0) return;
 
 	if (time >= self->frames[self->framesCount - 1]) /* Time is after last frame. */
 		frameIndex = self->framesCount - 1;
@@ -471,7 +480,7 @@ void _spAttachmentTimeline_apply (const spTimeline* timeline, spSkeleton* skelet
 		frameIndex = binarySearch(self->frames, self->framesCount, time, 1) - 1;
 
 	attachmentName = self->attachmentNames[frameIndex];
-	spSlot_setAttachment(skeleton->slots[self->slotIndex],
+	spSlot_setAttachment(slot,
 			attachmentName ? spSkeleton_getAttachmentForSlotIndex(skeleton, self->slotIndex, attachmentName) : 0);
 }
 
@@ -644,6 +653,7 @@ void _spFFDTimeline_apply (const spTimeline* timeline, spSkeleton* skeleton, flo
 	spFFDTimeline* self = (spFFDTimeline*)timeline;
 
 	spSlot *slot = skeleton->slots[self->slotIndex];
+	if ((slot->timelineFilter & SP_TIMELINE_FILTER_FFD) != 0) return;
 	if (slot->attachment != self->attachment) return;
 
 	if (time < self->frames[0]) {
